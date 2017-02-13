@@ -29,5 +29,6 @@ namespace Day1AttrRoutes.Models
         {
             return new ApplicationDbContext();
         }
+
     }
 }
