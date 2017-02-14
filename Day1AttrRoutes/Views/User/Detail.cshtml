@@ -1,7 +1,14 @@
 ﻿@model Day1AttrRoutes.Models.ApplicationUser
 
-<h1>@Model.UserName</h1>
-<h2>@Model.PasswordHash</h2>
-
-<a href="https://blogs.msdn.microsoft.com/webdev/2013/10/17/attribute-routing-in-asp-net-mvc-5/">Documentation</a>
+@if (ViewBag.IsFriend)
+{
+    <h4>You are @Model.UserName's friend!</h4>
+}
+else
+{
+    using (Html.BeginForm())
+    {
+        <input type="submit" value="Add as Friend" class="btn btn-danger" />
+    }
+}
 

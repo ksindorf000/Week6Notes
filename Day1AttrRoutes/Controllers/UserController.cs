@@ -33,7 +33,48 @@ namespace Day1AttrRoutes.Controllers
             ApplicationUser currentUser = db.Users
                .Where(u => u.UserName == userName) 
                .FirstOrDefault();
+
+            var reqId = User.Identity.GetUserId();
+            string targetId = currentUser.Id;
+
+            bool isFriend = db.Friends
+                .Where(
+                f => (f.RequestorId == reqId 
+                      && f.TargetId == targetId)
+                || 
+                     (f.RequestorId == targetId 
+                      && f.TargetId == reqId)
+                )
+                .Any();
+
+            ViewBag.IsFriend = isFriend;
+
             return View(currentUser);
+        }
+
+        //ADD: Friend
+        [HttpPost]
+        [Route("User/{userName}")]
+        public ActionResult AddFriend(string userName)
+        {
+            //Any business logic (blocked users, spam, hackers) goes here
+
+            var reqId = User.Identity.GetUserId();
+            var targetUser = db.Users
+                .Where(u => u.UserName == userName)
+                .FirstOrDefault();
+            string targetId = targetUser.Id;
+
+            Friend relationship = new Friend
+            {
+                RequestorId = reqId,
+                TargetId = targetId
+            };
+
+            db.Friends.Add(relationship);
+            db.SaveChanges();
+
+            return RedirectToAction("Detail");
         }
 
     }
